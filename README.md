@@ -23,6 +23,9 @@ Python kullanarak mac adresimizi değiştirelim. Python'da subprocess modülü ,
 * Daha sonra instance oluşturalım.(parse_object)
 * Sonra add option diyerek optionları ekleyelim.(Burada içerisine istediğimiz kadar arg(kullanıcıdan alınacak input belirtmek için kullanılır).Terminalde -i --interface ile verilebilir, dest (kullanıcıdan alınan input kaydedilecek yer)  biz burada interfeca değişkenine kaydediyorum eğer öyle bir değişken yoksa oluşturup kaydeder.Help, kullanıcı program için yardım istediğinde görüntülenmesi gereken yardım mesajını belirtir.) alabilir.
 Yukarıda interface için yaptığımız içerikleri mac adresi için de yapalım.
+* Buradaki amacımız kodu fonksiyon halinde yazıp istediğimiz zaman çağırma yada başka programlar tarafından kullanabilmek içindir. O yüzden yukrıdaki anlattığımız şekilde  kullanıcıdan interface ve mac adresini alan fonksiyon yazalım(get_user_input) .Bu fonksiyonda kullanıcının bilgilerini döndüren (return) kullanılır.
+
+
 
 ```cadence
 def get_user_input():
@@ -33,4 +36,31 @@ def get_user_input():
 
     return parse_object.parse_args()
 ```
-  
+
+*İkinci fonksiyonumuz mac_changer_address dir.Bu fonksiyon da kullanıcın girdiği interface ve mac adresini kullanıcağız.
+* Bu fonksiyonun içerisinde Python kodu içinden dış komutları çslıştırmsk için subprocess kullanıcağız. Dış komut olarak manual olarak mac adresi değiştirmede yazdığımız içeriği yazalım.Burdaki fark kullanıcan interface istediğimiz için manual mac değiştirmede eth0 olan yere kullanıcıdan alınan içerik ekleyelim.
+* Bu fonksiyon yukarıda bahsettiğim gibi kullanıcıdan alınan innterface ve mac adresi kullanır.
+
+```cadence
+def mac_changer_address(user_interface, user_mac_addres):
+
+    subprocess.call(["ifconfig", user_interface, "down"])
+    subprocess.call(["ifconfig",user_interface,"hw","ether",user_mac_addres])
+    subprocess.call(["ifconfig",user_interface,"up"])
+```
+
+* Yukarıdaki fonksiyonları çağırarak terminalde girilen interface ve mac adresine göre mac adresini değiştiryoruz . Ama değişmi diye ifconfig yapıp mac adresi bizim istediğimiz olmuş diye kontrol ediyoruz. Bu kontrolu programa yaptıralım.
+* Aşağıda kontrol işlemi için bir fonksiyon oluşturalım(control_new_mac)  Sonra ifconfig diye bir değişken oluşturalım ve bu değişkene subprocess check out(çıktı diyebiliriz) subprocess deki gibi yapalım. Bu fonksiyona interface parametresi alır.
+
+
+```cadence
+def control_new_mac(interface):
+    ifconfig = subprocess.check_output(["ifconfig",interface])
+    new_mac = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w",ifconfig.decode("utf-8"))
+
+    if new_mac:
+        return new_mac.group(0)
+    else:
+        return None
+```
+
