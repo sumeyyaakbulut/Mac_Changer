@@ -18,3 +18,7 @@ Yukarıdaki işlemden sonra ifconfig yaptığımızda ether(mac adresi) yazdığ
 
 ### 2.Python
 Python kullanarak mac adresimizi değiştirelim. Python'da subprocess modülü , Python kodu içinden dış komutları (örneğin ifconfig,ping,nmap) çalıştırmanıza ve bu komutlarla etkileşimde bulunmanıza olanak tanır.
+
+İlk olarak aşağıdaki gib kütüphaneye import(subprocess,optparse) edelim.
+Daha sonra instance oluşturalım.(parse_object)
+Sonra ad option diyerek optionları ekleyelim.(Burada içerisine istediğimiz kadar arg(kullanıcıdan alınacak input belirtmek için kullanılır).Terminalde -i --interface ile verilebilir) ve kwargs(kullanıcıdan alınan input kaydedilecek yer,(dest)  biz burada interfeca değişkenine kaydediyorum eğer öyle bir değişken yoksa oluşturup kaydeder.) alabilir.
